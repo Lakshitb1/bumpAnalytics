@@ -25,7 +25,7 @@ else:
         if response.status_code == 200:
             data = response.json()
             if data.get('status') == "success":
-                # Extract readings directly from the response
+                # Extract readings from the response
                 readings = data.get("readings", [])
                 if not readings:
                     st.warning("No readings found in the API response.")
@@ -37,6 +37,12 @@ else:
                 if df_main.empty:
                     st.warning("The fetched data is empty. Please check the API response.")
                     st.stop()
+
+                # Ensure correct data types for columns
+                df_main["timestamp"] = pd.to_datetime(df_main["timestamp"])
+                df_main["x"] = pd.to_numeric(df_main["x"], errors='coerce')
+                df_main["y"] = pd.to_numeric(df_main["y"], errors='coerce')
+                df_main["z"] = pd.to_numeric(df_main["z"], errors='coerce')
 
                 # Display Data and Analytics
                 st.title("Data Analytics")
@@ -62,10 +68,20 @@ else:
                         overview.show_overview(df_main)
 
                     if selected == 'Bump Analysis':
-                        bump.show_bump(df_main)
+                        # Filter bump-related data
+                        bump_data = df_main[df_main["label"] == "bump"]
+                        if not bump_data.empty:
+                            bump.show_bump(bump_data)
+                        else:
+                            st.warning("No 'bump' data available for analysis.")
 
                     if selected == 'Pothole Analysis':
-                        pothole.show_pothole(df_main)
+                        # Filter pothole-related data
+                        pothole_data = df_main[df_main["label"] == "pothole"]
+                        if not pothole_data.empty:
+                            pothole.show_pothole(pothole_data)
+                        else:
+                            st.warning("No 'pothole' data available for analysis.")
 
                 st.success("Prediction completed successfully!")
             else:
