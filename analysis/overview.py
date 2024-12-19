@@ -6,7 +6,17 @@ import numpy as np
 
 def show_overview(df):
     if df is not None and not df.empty:
-    
+
+        c = df['label'].value_counts()
+
+        # Check conditions and display appropriate messages
+        if c[0] < 2:
+            st.subheader("<center>Well Maintained</center>", unsafe_allow_html=True)
+        elif 2 <= c[0] < 8:
+            st.subheader("<center>Poorly Maintained, requires urgent rectification</center>", unsafe_allow_html=True)
+        else:
+            st.subheader("<center>Critical Condition, needs immediate attention</center>", unsafe_allow_html=True)
+            
         # Section 2: Label Distribution
         st.header("2. Label Distribution")
         st.subheader("Count of Each Label")
