@@ -13,9 +13,9 @@ def show_bump(df):
         # Add a severity column based on x, y, z values
         def classify_severity(row):
             total = row['y']
-            if 5 <= total < 7:
+            if 0<= total < 2.2:
                 return "Less"
-            elif 7 <= total <8:
+            elif 2.2 <= total <3.1:
                 return "Mild"
             else:
                 return "Severe"
