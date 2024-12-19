@@ -13,9 +13,9 @@ def show_pothole(df):
         # Add a severity column based on x, y, z values
         def classify_severity(row):
             total = row['y']
-            if -7 < total <= -5:
+            if 0 < total <= -2.2:
                 return "Less"
-            elif -8 < total <= -7:
+            elif -2.2 < total <= -3.1:
                 return "Mild"
             else:
                 return "Severe"
